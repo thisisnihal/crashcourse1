@@ -1,16 +1,19 @@
 import { create } from 'zustand';
 
 export const useStore = create((set) => ({
-  isDarkMode: false,    
-  user: null,           
-  count: 0,            
+  isDarkMode: typeof window !== "undefined" ? localStorage.getItem("theme") === "dark" : false,
+  user: null,
+  count: 0,
 
   toggleTheme: () =>
     set((state) => {
-      const html = document.documentElement;
-    html.classList.toggle('dark', !state.isDarkMode);
-      html.setAttribute('data-theme', !state.isDarkMode ? 'dark' : 'light');
-      return { isDarkMode: !state.isDarkMode };
+      const newTheme = !state.isDarkMode ? 'dark' : 'light';
+
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+
+      return { isDarkMode: newTheme === 'dark' };
     }),
   setUser: (user) => set({ user }),
 
