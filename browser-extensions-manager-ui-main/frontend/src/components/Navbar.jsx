@@ -1,7 +1,7 @@
 // import logo from "../assets/images/logo.svg";
 
-import SunIcon from "../assets/images/icon-sun.svg";
-import MoonIcon from "../assets/images/icon-moon.svg";
+import SunIcon from "/assets/images/icon-sun.svg";
+import MoonIcon from "/assets/images/icon-moon.svg";
 import { useStore } from "../store.js";
 import { useEffect } from "react";
 import Logo from "./Logo.jsx";

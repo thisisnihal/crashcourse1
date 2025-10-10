@@ -7,7 +7,7 @@ function App() {
  
 
   return (
-   <div className='w-screen h-screen p-16 bg-gradient'>
+   <div className='min-w-screen w-full h-full min-h-screen p-16 bg-gradient'>
     <Navbar />
     <Extension />
    </div>

@@ -1,29 +1,52 @@
-import React from "react";
-import ExtensionCard from "./ExtensionCard";
-import icon from "../assets/images/logo-devlens.svg"
+import React, { useState, useEffect } from "react";
+import ExtensionCard from "./ExtensionCard.jsx";
+import cardsData from "../data.json";
+// const icons = import.meta.glob("../assets/images/*.svg", { eager: true });
 
-
-function Button({ text, active = false }) {
-
-  return <button className={`cursor-pointer rounded-2xl backdrop-blur-lg bg-accent/60 shadow-md pr-4 pl-4 pt-0.5 pb-0.5  ${active ? "bg-red-500 text-bg" : "text-text"}`}>
-    {text}
-  </button>
+function Button({ text, active, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`cursor-pointer rounded-2xl backdrop-blur-lg bg-accent/60 shadow-md px-4 py-1 ${
+        active ? "bg-red-500 text-bg" : "text-text"
+      }`}
+    >
+      {text}
+    </button>
+  );
 }
 
 function Extension() {
+ 
+  const [filter, setFilter] = useState("All"); // All | Active | Inactive
+
+  
+
   return (
-    <div className="flex flex-col w-full h-full mt-4 text-text p-1 gap-8 ">
-      <div className="flex justify-between">
-        <h1 className="text-2xl font-bold ">Extensions List</h1>
-        <span className="flex w-fit gap-6 justify-evenly">
-          <Button text={"All"} active={true} />
-          <Button text={"Active"} />
-          <Button text={"InActive"} />
+    <div className="flex flex-col w-full h-full mt-4 text-text p-1 gap-8">
+     
+      <div className="flex justify-between flex-wrap">
+        <h1 className="text-2xl font-bold">Extensions List</h1>
+        <span className="flex w-fit justify-evenly scroll-auto gap-1 md:gap-6">
+          <Button text="All" active={filter === "All"} onClick={() => setFilter("All")} />
+          <Button text="Active" active={filter === "Active"} onClick={() => setFilter("Active")} />
+          <Button text="Inactive" active={filter === "Inactive"} onClick={() => setFilter("Inactive")} />
         </span>
       </div>
 
-      <div>
-        <ExtensionCard icon={icon} title={"DevLens"} description={"Quickly inspect page layouts and visualize element boundaries."} active={true} />
+    
+      <div className="flex flex-wrap gap-2.5 w-full border-0 justify-evenly">
+        {cardsData.map((card, index) => ( 
+          <ExtensionCard
+            key={index}
+            icon={card.logo}           
+            title={card.name}       
+            description={card.description}
+            isActive={card.isActive}
+  
+            
+          />
+        ))}
       </div>
     </div>
   );
