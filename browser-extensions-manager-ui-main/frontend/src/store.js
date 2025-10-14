@@ -1,9 +1,27 @@
 import { create } from 'zustand';
+import cardsJson from './data.json';
 
 export const useStore = create((set) => ({
   isDarkMode: typeof window !== "undefined" ? localStorage.getItem("theme") === "dark" : false,
-  user: null,
-  count: 0,
+
+  cardsData: (() => {
+    if (typeof window === "undefined") return cardsJson;
+    const saved = localStorage.getItem('cardsData');
+    return saved ? JSON.parse(saved) : cardsJson;
+  })(),
+
+  initCardData: () => {
+    if (typeof window === "undefined") return;
+
+    const saved = localStorage.getItem('cardsData');
+    if (saved) {
+      set({ cardsData: JSON.parse(saved) });
+    } else {
+      localStorage.setItem('cardsData', JSON.stringify(cardsJson));
+      set({ cardsData: cardsJson });
+    }
+  },
+
 
   toggleTheme: () =>
     set((state) => {
@@ -15,9 +33,15 @@ export const useStore = create((set) => ({
 
       return { isDarkMode: newTheme === 'dark' };
     }),
-  setUser: (user) => set({ user }),
 
-  increment: () => set((state) => ({ count: state.count + 1 })),
+  setCardsData: (cardsData) => {
+    set(() => ({ cardsData: cardsData }));
+    localStorage.setItem('cardsData', JSON.stringify(cardsData));
+  },
 
-  decrement: () => set((state) => ({ count: state.count - 1 })),
+
+  removeCard: (id) =>
+    set((state) => ({
+      cardsData: state.cardsData.filter((c) => c.id !== id),
+    })),
 }));
