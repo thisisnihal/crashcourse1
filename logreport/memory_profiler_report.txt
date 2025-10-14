@@ -1,0 +1,151 @@
+(.logreportenv) PS C:\Users\kumarn1\Downloads\proj\logreport> python -m memory_profiler .\main.py
+log per level: {'ERROR': 167392, 'DEBUG': 168115, 'CRITICAL': 167886, 'WARNING': 167994, 'INFO': 167910}
+
+error per service: {'OrderService': 33496, 'AuthService': 33292, 'InventoryService': 33603, 'PaymentService': 33672, 'AnalyticsService': 33329}
+
+most occured errors:  [(27991, 'Order created successfully'), (27990, 'Order created successfully'), (27989, 'Order created successfully'), (27988, 'Order created successfully'), (27987, 'Order created successfully')]
+
+most occured logs:  [(5817, ('DEBUG', 'AuthService', 'Database connection lost')), (5816, ('DEBUG', 'AuthService', 'Database connection lost')), (5815, ('DEBUG', 'AuthService', 'Database connection lost')), (5814, ('DEBUG', 'AuthService', 'Database connection lost')), (5813, ('DEBUG', 'AuthService', 'Database connection lost'))]
+
+Execution time: 404.4041 seconds
+Filename: .\main.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+     4     69.3 MiB     69.3 MiB           1   @profile
+     5                                         def using_json():
+     6     69.3 MiB      0.0 MiB           1       import json
+     7     69.3 MiB      0.0 MiB           1       import heapq
+     8     69.3 MiB      0.0 MiB           1       import time
+     9
+    10     69.3 MiB      0.0 MiB           1       start_time = time.perf_counter()
+    11
+    12     69.3 MiB      0.0 MiB           1       log_level_freq = {}     # {Key.ERROR: 56, 'WARNING': 12}
+    13     69.3 MiB      0.0 MiB           1       error_service_freq = {} # {'UserService': 12, 'AuthService': 12}
+    14     69.3 MiB      0.0 MiB           1       top_logs = []           # a heap stores top k logs
+    15     69.3 MiB      0.0 MiB           1       top_errors = []         # a heap stores top k error
+    16     69.3 MiB      0.0 MiB           1       log_counter = {}        # {'log_message_x': 2}
+    17     69.3 MiB      0.0 MiB           1       error_counter = {}      # {'error_message_1': 4}
+    18     69.3 MiB      0.0 MiB           1       FILE_PATH = 'data/logs_100mb.json'
+    19     69.3 MiB      0.0 MiB           1       TOP_K = 5
+    20     69.3 MiB      0.0 MiB           3       class Key:
+    21     69.3 MiB      0.0 MiB           1           LEVEL = 'level'
+    22     69.3 MiB      0.0 MiB           1           ERROR = 'ERROR'
+    23     69.3 MiB      0.0 MiB           1           SERVICE = 'service'
+    24     69.3 MiB      0.0 MiB           1           MESSAGE = 'message'
+    25
+    26     69.3 MiB      0.0 MiB           1       f = open(FILE_PATH)
+    27     69.3 MiB      0.0 MiB           1       import json
+    28    432.5 MiB    363.2 MiB           1       logs = json.load(f)
+    29    432.5 MiB -2137201.1 MiB      839298       for index, log in enumerate(logs):
+    30    432.5 MiB -2137198.7 MiB      839297               if log[Key.LEVEL]:
+    31    432.5 MiB -2137198.7 MiB      839297                   log_level_freq[log[Key.LEVEL]] = log_level_freq.get(log[Key.LEVEL], 0) + 1
+    32    432.5 MiB -2137198.7 MiB      839297               if log[Key.LEVEL] == Key.ERROR and log[Key.SERVICE]:
+    33    432.5 MiB -426249.5 MiB      167392                   error_service_freq[log[Key.SERVICE]] = error_service_freq.get(log[Key.SERVICE], 0) + 1
+    34
+    35    432.5 MiB -2137198.9 MiB      839297               log_key = (log.get(Key.LEVEL,''), log.get(Key.SERVICE,''), log.get(Key.MESSAGE,''))
+    36    432.5 MiB -2137199.1 MiB      839297               log_count = log_counter.get(log_key, 0) + 1
+    37
+    38    432.5 MiB -2137199.2 MiB      839297               log_counter[log_key] = log_count
+    39    432.5 MiB -2137199.9 MiB      839297               heapq.heappush(top_logs, (log_count, log_key))
+    40    432.5 MiB -2137199.9 MiB      839297               if len(top_logs) > TOP_K:
+    41    432.5 MiB -2137200.7 MiB      839292                   heapq.heappop(top_logs)
+    42
+    43    432.5 MiB -2137201.2 MiB      839297               if log.get(Key.LEVEL) == Key.ERROR:
+    44    432.5 MiB -426249.5 MiB      167392                   msg = log.get(Key.MESSAGE,'')
+    45    432.5 MiB -426249.5 MiB      167392                   err_count = error_counter.get(msg, 0) + 1
+    46    432.5 MiB -426249.5 MiB      167392                   error_counter[msg] = err_count
+    47    432.5 MiB -426249.5 MiB      167392                   heapq.heappush(top_errors, (err_count, msg))
+    48    432.5 MiB -426249.5 MiB      167392                   if len(top_errors) > TOP_K:
+    49    432.5 MiB -426249.5 MiB      167387                       heapq.heappop(top_errors)
+    50
+    51
+    52    430.1 MiB     -2.4 MiB           1       print('log per level:', log_level_freq)
+    53    430.1 MiB      0.0 MiB           1       print('\nerror per service:', error_service_freq)
+    54
+    55    430.1 MiB      0.0 MiB           1       most_occured_logs = sorted(top_logs, reverse=True)
+    56    430.1 MiB      0.0 MiB           1       most_occured_errors = sorted(top_errors, reverse=True)
+    57
+    58    430.1 MiB      0.0 MiB           1       print("\nmost occured errors: ", most_occured_errors)
+    59    430.1 MiB      0.0 MiB           1       print("\nmost occured logs: ", most_occured_logs)
+    60
+    61
+    62    430.1 MiB      0.0 MiB           1       end_time = time.perf_counter()
+    63    430.1 MiB      0.0 MiB           1       execution_time = end_time - start_time
+    64    430.1 MiB      0.0 MiB           1       print(f"\nExecution time: {execution_time:.4f} seconds")
+
+
+log per level: {'ERROR': 167392, 'DEBUG': 168115, 'CRITICAL': 167886, 'WARNING': 167994, 'INFO': 167910}
+
+error per service: {'OrderService': 33496, 'AuthService': 33292, 'InventoryService': 33603, 'PaymentService': 33672, 'AnalyticsService': 33329}
+
+most occured errors:  [(27991, 'Order created successfully'), (27990, 'Order created successfully'), (27989, 'Order created successfully'), (27988, 'Order created successfully'), (27987, 'Order created successfully')]
+
+most occured logs:  [(5817, ('DEBUG', 'AuthService', 'Database connection lost')), (5816, ('DEBUG', 'AuthService', 'Database connection lost')), (5815, ('DEBUG', 'AuthService', 'Database connection lost')), (5814, ('DEBUG', 'AuthService', 'Database connection lost')), (5813, ('DEBUG', 'AuthService', 'Database connection lost'))]
+
+Execution time: 367.2160 seconds
+Filename: .\main.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+    68     69.7 MiB     69.7 MiB           1   @profile
+    69                                         def using_ijson():
+    70     69.9 MiB      0.2 MiB           1       import ijson
+    71     69.9 MiB      0.0 MiB           1       import heapq
+    72     69.9 MiB      0.0 MiB           1       import time
+    73
+    74     69.9 MiB      0.0 MiB           1       start_time = time.perf_counter()
+    75
+    76     69.9 MiB      0.0 MiB           1       log_level_freq = {}     # {Key.ERROR: 56, 'WARNING': 12}
+    77     69.9 MiB      0.0 MiB           1       error_service_freq = {} # {'UserService': 12, 'AuthService': 12}
+    78     69.9 MiB      0.0 MiB           1       top_logs = []           # a heap stores top k logs
+    79     69.9 MiB      0.0 MiB           1       top_errors = []         # a heap stores top k error
+    80     69.9 MiB      0.0 MiB           1       log_counter = {}        # {'log_message_x': 2}
+    81     69.9 MiB      0.0 MiB           1       error_counter = {}      # {'error_message_1': 4}
+    82
+    83     69.9 MiB      0.0 MiB           1       TOP_K = 5
+    84     69.9 MiB      0.0 MiB           1       FILE_PATH = 'data/logs_100mb.json'
+    85     69.9 MiB      0.0 MiB           3       class Key:
+    86     69.9 MiB      0.0 MiB           1           LEVEL = 'level'
+    87     69.9 MiB      0.0 MiB           1           ERROR = 'ERROR'
+    88     69.9 MiB      0.0 MiB           1           SERVICE = 'service'
+    89     69.9 MiB      0.0 MiB           1           MESSAGE = 'message'
+    90
+    91     70.3 MiB     -0.2 MiB           2       with open(FILE_PATH, 'r') as f:
+    92     70.5 MiB -210304.2 MiB      839298           for log in ijson.items(f, 'item'):
+    93                                                     # print(record)
+    94     70.5 MiB -210318.2 MiB      839297               if log[Key.LEVEL]:
+    95     70.5 MiB -210330.7 MiB      839297                   log_level_freq[log[Key.LEVEL]] = log_level_freq.get(log[Key.LEVEL], 0) + 1
+    96     70.5 MiB -210342.0 MiB      839297               if log[Key.LEVEL] == Key.ERROR and log[Key.SERVICE]:
+    97     70.5 MiB -41898.9 MiB      167392                   error_service_freq[log[Key.SERVICE]] = error_service_freq.get(log[Key.SERVICE], 0) + 1
+    98
+    99     70.5 MiB -210355.1 MiB      839297               log_key = (log.get(Key.LEVEL,''), log.get(Key.SERVICE,''), log.get(Key.MESSAGE,''))
+   100     70.5 MiB -210365.7 MiB      839297               log_count = log_counter.get(log_key, 0) + 1
+   101
+   102     70.5 MiB -210377.5 MiB      839297               log_counter[log_key] = log_count
+   103     70.5 MiB -210388.9 MiB      839297               heapq.heappush(top_logs, (log_count, log_key))
+   104     70.5 MiB -210402.3 MiB      839297               if len(top_logs) > TOP_K:
+   105     70.5 MiB -210415.8 MiB      839292                   heapq.heappop(top_logs)
+   106
+   107     70.5 MiB -210429.5 MiB      839297               if log.get(Key.LEVEL) == Key.ERROR:
+   108     70.5 MiB -41918.7 MiB      167392                   msg = log.get(Key.MESSAGE,'')
+   109     70.5 MiB -41921.1 MiB      167392                   err_count = error_counter.get(msg, 0) + 1
+   110     70.5 MiB -41922.9 MiB      167392                   error_counter[msg] = err_count
+   111     70.5 MiB -41925.1 MiB      167392                   heapq.heappush(top_errors, (err_count, msg))
+   112     70.5 MiB -41926.9 MiB      167392                   if len(top_errors) > TOP_K:
+   113     70.5 MiB -41928.7 MiB      167387                       heapq.heappop(top_errors)
+   114
+   115
+   116     70.3 MiB      0.0 MiB           1       print('log per level:', log_level_freq)
+   117     70.3 MiB      0.0 MiB           1       print('\nerror per service:', error_service_freq)
+   118
+   119     70.3 MiB      0.0 MiB           1       most_occured_logs = sorted(top_logs, reverse=True)
+   120     70.3 MiB      0.0 MiB           1       most_occured_errors = sorted(top_errors, reverse=True)
+   121
+   122     70.3 MiB      0.0 MiB           1       print("\nmost occured errors: ", most_occured_errors)
+   123     70.3 MiB      0.0 MiB           1       print("\nmost occured logs: ", most_occured_logs)
+   124
+   125
+   126     70.3 MiB      0.0 MiB           1       end_time = time.perf_counter()
+   127     70.3 MiB      0.0 MiB           1       execution_time = end_time - start_time
+   128     70.3 MiB      0.0 MiB           1       print(f"\nExecution time: {execution_time:.4f} seconds")
