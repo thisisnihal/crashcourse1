@@ -29,7 +29,7 @@ To run the application:
 ## 3. Json Log report Analysis
 A script that analyses the log report stored in a json file format.  
 
-The Json file can be in GBs so using `json` can be bottleneck for smaller machines(say 512gb ram server).  
+The Json file can be in GBs so using `json` can be bottleneck for smaller machines(say 512mb ram server).  
 
 So I used one external python library called `ijson` which parses the json file iteratively. Meaning it loads one item of a json file in memory at a time.  
 
