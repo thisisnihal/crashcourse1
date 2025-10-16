@@ -1,0 +1,21 @@
+name,email,phone,city
+Alice,alice@example.com,9876543210,New York
+Bob,bob@example.com,9123456789,Los Angeles
+Charlie,charlie@example.com,9012345678,Chicago
+David,david@example.com,8899776655,Houston
+Eve,eve@example.com,9988776655,Phoenix
+Frank,frank@example.com,7788996655,Philadelphia
+Grace,grace@example.com,6677889900,San Antonio
+Heidi,heidi@example.com,5566778899,San Diego
+Ivan,ivan@example.com,4455667788,Dallas
+Judy,judy@example.com,3344556677,San Jose
+Alice,alice@example.com,9876543210,New York
+Mallory,mallory@example.com,2233445566,Austin
+Oscar,oscar@example.com,1122334455,Jacksonville
+Peggy,peggy@example.com,2211334455,Fort Worth
+Sybil,sybil@example.com,3322114455,Columbus
+Trent,trent@example.com,4433221100,Charlotte
+Victor,victor@example.com,5544332211,San Francisco
+Walter,walter@example.com,6655443322,Indianapolis
+Xavier,xavier@example.com,7766554433,Seattle
+Yvonne,yvonne@example.com,8877665544,Denver
