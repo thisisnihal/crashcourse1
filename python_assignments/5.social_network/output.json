@@ -1,0 +1,16 @@
+{
+  "method_used": "DFS",
+  "graph": {
+    "A": ["B", "C"],
+    "B": ["A", "D", "E"],
+    "C": ["A"],
+    "D": ["B"],
+    "E": ["B"]
+  },
+  "start": "A",
+  "end": "E",
+  "path_found": ["A", "B", "E"],
+  "path_exists": true,
+  "path_length": 3,
+  "time_taken_seconds": 8e-6
+}

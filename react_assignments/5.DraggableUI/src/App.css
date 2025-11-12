@@ -1,0 +1,39 @@
+.app {
+  font-family: sans-serif;
+  padding: 20px;
+}
+
+.add-task {
+  margin-bottom: 20px;
+}
+
+.add-task input {
+  padding: 8px;
+  width: 200px;
+}
+
+.add-task button {
+  padding: 8px 12px;
+  margin-left: 10px;
+}
+
+.board {
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+  padding: 15px;
+  background: #f3f3f3;
+  border: 1px solid #ccc;
+  min-height: 300px;
+}
+
+.card {
+  background: white;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  cursor: grab;
+}
