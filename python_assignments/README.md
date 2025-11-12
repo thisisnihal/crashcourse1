@@ -49,9 +49,3 @@ Notes
 - If a script requires additional packages, install them from the top-level `requirements.txt` inside this folder.
 - No formal test suite is included. If you'd like, I can add minimal unit tests or example inputs/outputs for any project.
 
-Suggested next steps
-- Add a small README inside each subproject with example outputs and any CLI flags used by that project's `main.py`.
-- (Optional) Add unit tests (pytest) for `3.remove_duplicate_emails` and `4.redact_users_info` to guarantee correctness on edge cases.
-
-Contact / Maintainer
-- Created from repository context. Open an issue or ask for updates if you want more detailed per-project docs or runnable examples.
