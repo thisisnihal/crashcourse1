@@ -1,0 +1,14 @@
+fastapi
+uvicorn
+sqlalchemy
+asyncpg
+bcrypt
+
+
+certifi
+charset-normalizer
+idna
+python-dotenv
+requests
+urllib3
+
