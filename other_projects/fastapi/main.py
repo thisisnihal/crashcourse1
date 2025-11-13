@@ -1,26 +1,35 @@
-""""""
-
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 from routers import router
-from db import engine
+from db import engine, async_session
 from users_service import insert_sample_users, create_users_table
+from sqlalchemy import select
+from models import User
 from dotenv import load_dotenv
-from sqlalchemy import text
 
 load_dotenv()
-app = FastAPI(title="Fast API Test")
 
 
-@app.on_event("startup")
-async def startup_event():
-    async with engine.connect() as conn:
-        await create_users_table(conn)
-        result = await conn.execute(text("SELECT 1 FROM users LIMIT 1;"))
-        if not result.first():
-            await insert_sample_users(conn)
-            print("startup done")
-        await conn.commit()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # startup logic
+    await create_users_table(engine)
 
+    async with async_session() as session:
+        result = await session.execute(select(User).limit(1))
+        if not result.scalar_one_or_none():
+            await insert_sample_users(session)
+            print("Sample users inserted.")
+        else:
+            print("Users already exist.")
+
+    # handover control to FastAPI runtime
+    yield
+
+    print("Application shutting down.")
+
+
+app = FastAPI(title="Fast API Test", lifespan=lifespan)
 
 app.include_router(router, prefix="/api/v1")
 

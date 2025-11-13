@@ -3,7 +3,7 @@ uvicorn
 sqlalchemy
 asyncpg
 bcrypt
-
+pydantic[email]
 
 certifi
 charset-normalizer

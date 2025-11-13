@@ -1,16 +1,17 @@
-from sqlalchemy import Table, Column, Integer, String, Boolean, DateTime, MetaData, text
+from sqlalchemy import Column, Integer, String, Boolean, DateTime, text
+from sqlalchemy.orm import declarative_base
 
-metadata = MetaData()
+Base = declarative_base()
 
-users = Table(
-    "users",
-    metadata,
-    Column("id", Integer, primary_key=True),
-    Column("email", String(255), nullable=False, unique=True),
-    Column("hashed_password", String(255), nullable=False),
-    Column("is_active", Boolean, nullable=False, server_default=text("TRUE")),
-    Column(
-        "created_at", DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP")
-    ),
-    Column("role", String(50), nullable=False, server_default=text("'user'")),
-)
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True)
+    email = Column(String(255), nullable=False, unique=True)
+    hashed_password = Column(String(255), nullable=False)
+    is_active = Column(Boolean, nullable=False, server_default=text("TRUE"))
+    created_at = Column(
+        DateTime, nullable=False, server_default=text("CURRENT_TIMESTAMP")
+    )
+    role = Column(String(50), nullable=False, server_default=text("'user'"))
